@@ -314,4 +314,3 @@ textarea { resize: vertical; font-family: var(--font-mono); font-size: 13px; }
   .keyword-cols, .verdict-grid { grid-template-columns: 1fr; }
   .stepper li span { display: none; }
 }
-.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--signal);font-weight:600;margin-bottom:12px}.intro-points{margin:22px 0 14px}.intro-points p{margin:8px 0}.skill-check-list{display:flex;flex-direction:column;gap:7px}.skill-check{display:flex;align-items:center;gap:8px;margin:0;padding:7px 9px;background:var(--gap-bg);border-radius:3px;color:var(--gap);font-family:var(--font-mono);font-size:12px;cursor:pointer}.skill-check input{width:auto;margin:0}.recommendation{margin:0 0 22px}.recommendation h2{margin-bottom:12px}.recommendation h3{font-size:14px;margin:22px 0 10px}.small-big{font-size:30px!important}

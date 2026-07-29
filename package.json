@@ -1,14 +1,12 @@
 {
   "name": "neurapath-resume-scan",
   "version": "1.0.0",
-  "description": "NeuraPath Skill Gap Analyser",
+  "description": "Resume ATS score + skill check lead-gen tool for NeuraPath Academy",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,6 +15,7 @@
     "express": "^5.2.1",
     "mammoth": "^1.12.0",
     "multer": "^2.2.0",
-    "pdfjs-dist": "^4.10.38"
+    "pdf-parse": "^1.1.1",
+    "uuid": "^14.0.1"
   }
 }

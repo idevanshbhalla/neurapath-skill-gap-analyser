@@ -1,17 +1,101 @@
-let CONFIG=null; const state={leadId:null,roleId:null,name:'',file:null,pastedText:'',atsScore:null,matchedKeywords:[],missingKeywords:[],quizScore:null,quizTier:null,quizTotal:10};
-const stepperMap={intro:'intro',details:'details',resume:'resume',scanning:'resume','ats-result':'resume',quiz:'quiz',verdict:'verdict'}; const order=['intro','details','resume','quiz','verdict'];
-function showStep(name){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById('step-'+name).classList.add('active');const i=order.indexOf(stepperMap[name]);document.querySelectorAll('#stepper li').forEach(li=>{const x=order.indexOf(li.dataset.step);li.classList.toggle('active',x===i);li.classList.toggle('done',x<i)});window.scrollTo({top:0,behavior:'smooth'})}
-async function init(){const r=await fetch('/api/config');CONFIG=await r.json();CONFIG.roles.forEach(x=>document.getElementById('role-select').insertAdjacentHTML('beforeend',`<option value="${x.id}">${x.label}</option>`))}init();
-document.getElementById('btn-start').onclick=()=>showStep('details');
-document.getElementById('form-details').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,err=document.getElementById('details-error');err.textContent='';const p={name:f.name.value,email:f.email.value,phone:f.phone.value,roleId:f.roleId.value};try{const r=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}),d=await r.json();if(!r.ok)throw new Error(d.error);Object.assign(state,{leadId:d.leadId,roleId:p.roleId,name:p.name});showStep('resume')}catch(x){err.textContent=x.message||'Could not continue.'}});
-const dz=document.getElementById('dropzone'),fi=document.getElementById('file-input');dz.onclick=()=>fi.click();dz.ondragover=e=>{e.preventDefault();dz.classList.add('dragover')};dz.ondragleave=()=>dz.classList.remove('dragover');dz.ondrop=e=>{e.preventDefault();dz.classList.remove('dragover');if(e.dataTransfer.files[0]){state.file=e.dataTransfer.files[0];document.getElementById('filename').textContent=state.file.name}};fi.onchange=()=>{state.file=fi.files[0];document.getElementById('filename').textContent=state.file?.name||''};document.getElementById('toggle-paste').onclick=()=>document.getElementById('paste-area').classList.toggle('hidden');
-document.getElementById('btn-scan').onclick=async()=>{const err=document.getElementById('resume-error');err.textContent='';state.pastedText=document.getElementById('paste-text').value.trim();if(!state.file&&!state.pastedText){err.textContent='Upload a resume or paste its text.';return}showStep('scanning');const label=document.getElementById('scan-label');setTimeout(()=>label.textContent='MATCHING ROLE SKILLS…',700);const fd=new FormData();fd.append('leadId',state.leadId);fd.append('roleId',state.roleId);if(state.file)fd.append('resume',state.file);if(state.pastedText)fd.append('pastedText',state.pastedText);try{const r=await fetch('/api/resume',{method:'POST',body:fd}),d=await r.json();if(!r.ok)throw d;Object.assign(state,{atsScore:d.score,matchedKeywords:d.matched,missingKeywords:d.missing});renderSkills();showStep('ats-result')}catch(x){showStep('resume');err.textContent=x.error||'Could not parse the resume.';if(x.needsPasteFallback)document.getElementById('paste-area').classList.remove('hidden')}};
-function tag(text,kind='matched'){const s=document.createElement('span');s.className='tag '+kind;s.textContent=text;return s}
-function renderSkills(){document.getElementById('ats-score-inline').textContent=state.atsScore+'%';document.getElementById('ats-meter-fill').style.width=state.atsScore+'%';const m=document.getElementById('matched-list');m.innerHTML='';state.matchedKeywords.forEach(x=>m.appendChild(tag(x)));const miss=document.getElementById('missing-list');miss.innerHTML='';state.missingKeywords.forEach((x,i)=>{const l=document.createElement('label');l.className='skill-check';l.innerHTML=`<input type="checkbox" value="${i}"><span>${x}</span>`;miss.appendChild(l)})}
-document.getElementById('btn-to-quiz').onclick=async()=>{const checked=[...document.querySelectorAll('#missing-list input:checked')].map(x=>state.missingKeywords[Number(x.value)]);if(checked.length){const r=await fetch('/api/skills/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({leadId:state.leadId,roleId:state.roleId,confirmedSkills:checked})}),d=await r.json();if(r.ok)Object.assign(state,{atsScore:d.score,matchedKeywords:d.matched,missingKeywords:d.missing})}const r=await fetch('/api/quiz/'+state.roleId),d=await r.json();renderQuiz(d.questions);showStep('quiz')};
-function renderQuiz(qs){document.getElementById('quiz-role-label').textContent=CONFIG.roles.find(x=>x.id===state.roleId).label;state.quizTotal=qs.length;const f=document.getElementById('quiz-form');f.innerHTML='';qs.forEach((q,i)=>{const d=document.createElement('div');d.className='quiz-q';d.innerHTML=`<p class="q-text">${i+1}. ${q.q}</p><div class="options">${q.options.map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}"><span>${o}</span></label>`).join('')}</div>`;f.appendChild(d)})}
-document.getElementById('btn-submit-quiz').onclick=async()=>{const a=[];for(let i=0;i<state.quizTotal;i++){const x=document.querySelector(`input[name=q${i}]:checked`);a.push(x?Number(x.value):-1)}if(a.includes(-1)&&!confirm('Some questions are unanswered. Submit anyway?'))return;const r=await fetch('/api/quiz/'+state.roleId+'/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({leadId:state.leadId,answers:a})}),d=await r.json();Object.assign(state,{quizScore:d.score,quizTier:d.tier,quizTotal:d.total});renderVerdict();showStep('verdict')};
-const FDE=['Advanced Python','FastAPI','REST APIs','Docker','Lang-chain', 'Lang-graph','AWS','Deployment','OAuth 2.0','RBAC','CI/CD','LLM APIs','RAG','AI Agents','Agentic Workflows','Tool Calling','MCP Servers','Vector Databases','Observability','System Design'];
-const GENAI=['LLMs','Prompt Engineering','RAG','Embeddings','Vector Databases','LangChain/LangGraph','LLM APIs','Function Calling','AI Agents','Agentic Workflows','MCP','Evaluation','Guardrails','Fine-tuning basics','Deployment'];
-function recommendation(){const q=state.quizScore/state.quizTotal,gap=state.missingKeywords.length/(state.matchedKeywords.length+state.missingKeywords.length);const advancedRole=['genai-engineer','ai-engineer','fde'].includes(state.roleId);if(gap>=.55||q<.5)return{title:'Forward Deployed Engineer (FDE) path',skills:FDE,reason:'Your current profile shows broad gaps across both job-facing skills and technical depth. A narrow GenAI add-on would leave too many engineering gaps. An FDE-style path is the stronger fit because it combines AI with APIs, cloud, deployment, security and production engineering.'};if(advancedRole||gap>=.3||q<.8)return{title:'GenAI + Agentic AI path',skills:GENAI,reason:'Your foundations are usable, but your profile is missing several skills that now appear in applied AI roles. The highest-value next step is to add production-oriented GenAI and agentic AI skills rather than repeat basic Python/ML content.'};return{title:'Targeted interview + portfolio strengthening',skills:['Role-specific projects','Resume keyword alignment','Advanced SQL/Python practice','Mock interviews','Deployment-ready portfolio'],reason:'Your fundamentals and resume coverage are relatively strong. A full new program is not automatically the best next step; targeted projects, interview practice and stronger evidence of applied work may give you better return.'}}
-function renderVerdict(){document.getElementById('verdict-ats').textContent=state.atsScore+'%';document.getElementById('verdict-quiz').textContent=`${state.quizScore}/${state.quizTotal}`;const rec=recommendation();document.getElementById('path-title').textContent=rec.title;document.getElementById('verdict-text').textContent=rec.reason;const gaps=document.getElementById('final-gaps');gaps.innerHTML='';state.missingKeywords.slice(0,12).forEach(x=>gaps.appendChild(tag(x,'missing')));if(!state.missingKeywords.length)gaps.appendChild(tag('No major resume keyword gaps detected'));const ps=document.getElementById('path-skills');ps.innerHTML='';rec.skills.forEach(x=>ps.appendChild(tag(x)));const missing=state.missingKeywords.length?state.missingKeywords.map(x=>'• '+x).join('\n'):'• No major resume keyword gaps detected';const role=CONFIG.roles.find(x=>x.id===state.roleId).label;const msg=`Sir, I have taken the NeuraPath skill-gap analysis for ${role}.\n\nMy resume match: ${state.atsScore}%\nTechnical test: ${state.quizScore}/${state.quizTotal}\n\nSkills not currently reflected in my profile:\n${missing}\n\nThe analyser recommended: ${rec.title}.\nI want to understand how I can learn and apply these skills.`;document.getElementById('btn-cta').href=`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`}
+let CONFIG = null;
+let state = { leadId:null, roleId:null, file:null, pastedText:'', atsScore:null, matchedKeywords:[], missingKeywords:[] };
+
+const stepperMap = {details:'details', resume:'resume', scanning:'resume', 'ats-result':'analysis', analysis:'analysis'};
+const order = ['details','resume','analysis'];
+
+function showStep(name) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + name).classList.add('active');
+  const activeIdx = order.indexOf(stepperMap[name]);
+  document.querySelectorAll('#stepper li').forEach(li => {
+    const idx = order.indexOf(li.dataset.step);
+    li.classList.toggle('active', idx === activeIdx);
+    li.classList.toggle('done', idx < activeIdx);
+  });
+}
+
+async function init() {
+  const res = await fetch('/api/config');
+  CONFIG = await res.json();
+  const select = document.getElementById('role-select');
+  CONFIG.roles.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r.id; opt.textContent = r.label; select.appendChild(opt);
+  });
+}
+init();
+
+document.getElementById('form-details').addEventListener('submit', async e => {
+  e.preventDefault();
+  const errorEl = document.getElementById('details-error'); errorEl.textContent = '';
+  const f = e.target;
+  const payload = {name:f.name.value,email:f.email.value,phone:f.phone.value,roleId:f.roleId.value};
+  try {
+    const res = await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data = await res.json();
+    if(!res.ok){errorEl.textContent=data.error||'Something went wrong.';return;}
+    state.leadId=data.leadId; state.roleId=payload.roleId; showStep('resume');
+  } catch { errorEl.textContent='Could not reach the server. Try again.'; }
+});
+
+const dropzone=document.getElementById('dropzone'), fileInput=document.getElementById('file-input'), filenameEl=document.getElementById('filename');
+dropzone.addEventListener('click',()=>fileInput.click());
+dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('dragover')});
+dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop',e=>{e.preventDefault();dropzone.classList.remove('dragover');if(e.dataTransfer.files.length){fileInput.files=e.dataTransfer.files;handleFileChosen();}});
+fileInput.addEventListener('change',handleFileChosen);
+function handleFileChosen(){if(fileInput.files.length){state.file=fileInput.files[0];filenameEl.textContent=state.file.name;}}
+document.getElementById('toggle-paste').addEventListener('click',()=>document.getElementById('paste-area').classList.toggle('hidden'));
+
+document.getElementById('btn-scan').addEventListener('click',async()=>{
+  const errorEl=document.getElementById('resume-error'); errorEl.textContent='';
+  state.pastedText=document.getElementById('paste-text').value.trim();
+  if(!state.file&&!state.pastedText){errorEl.textContent='Upload a file or paste your resume text.';return;}
+  showStep('scanning');
+  const scanLabel=document.getElementById('scan-label'); scanLabel.textContent='READING DOCUMENT…';
+  setTimeout(()=>{if(document.getElementById('step-scanning').classList.contains('active'))scanLabel.textContent='MAPPING SKILLS…';},900);
+  const fd=new FormData(); fd.append('leadId',state.leadId);fd.append('roleId',state.roleId);
+  if(state.file)fd.append('resume',state.file);if(state.pastedText)fd.append('pastedText',state.pastedText);
+  try{
+    const res=await fetch('/api/resume',{method:'POST',body:fd});const data=await res.json();
+    if(!res.ok){showStep('resume');errorEl.textContent=data.error||'Something went wrong.';if(data.needsPasteFallback)document.getElementById('paste-area').classList.remove('hidden');return;}
+    state.atsScore=data.score;state.matchedKeywords=data.matched;state.missingKeywords=data.missing;
+    renderAtsResult(data);setTimeout(()=>showStep('ats-result'),400);
+  }catch{showStep('resume');errorEl.textContent='Could not reach the server. Try again.';}
+});
+
+function renderAtsResult(data){
+  document.getElementById('ats-score-inline').textContent=data.score+'%';
+  document.getElementById('ats-meter-fill').style.width=data.score+'%';
+  const matched=document.getElementById('matched-list'),missing=document.getElementById('missing-list');
+  matched.innerHTML='';missing.innerHTML='';
+  data.matched.forEach(k=>matched.insertAdjacentHTML('beforeend',`<span class="tag matched">${escapeHtml(k)}</span>`));
+  data.missing.forEach(k=>missing.insertAdjacentHTML('beforeend',`<span class="tag missing">${escapeHtml(k)}</span>`));
+  if(!data.matched.length)matched.innerHTML='<span class="tag matched">None detected</span>';
+  if(!data.missing.length)missing.innerHTML='<span class="tag missing">No major gaps detected</span>';
+}
+
+document.getElementById('btn-to-analysis').addEventListener('click', async()=>{
+  try{
+    const res=await fetch('/api/recommendation/'+state.roleId,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({leadId:state.leadId,score:state.atsScore,matched:state.matchedKeywords,missing:state.missingKeywords})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Could not create recommendation.');
+    renderAnalysis(data);showStep('analysis');
+  }catch(err){alert(err.message);}
+});
+
+function renderAnalysis(data){
+  document.getElementById('path-name').textContent=data.pathName;
+  document.getElementById('analysis-text').textContent=data.explanation;
+  const skills=document.getElementById('new-skills-list');skills.innerHTML='';
+  data.newSkills.forEach(k=>skills.insertAdjacentHTML('beforeend',`<span class="tag matched">${escapeHtml(k)}</span>`));
+  const roles=document.getElementById('opportunity-list');roles.innerHTML='';
+  data.opportunityRoles.forEach(k=>roles.insertAdjacentHTML('beforeend',`<span class="tag matched">${escapeHtml(k)}</span>`));
+  document.getElementById('opportunity-note').textContent=data.opportunityNote;
+  document.getElementById('btn-cta').href=data.whatsappUrl;
+}
+function escapeHtml(v){const d=document.createElement('div');d.textContent=v;return d.innerHTML;}
