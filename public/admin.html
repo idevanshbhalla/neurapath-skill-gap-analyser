@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Leads — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #EEEFE8; color: #16211C; margin: 0; padding: 28px; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  p.sub { color: #4A554E; font-size: 13px; margin-top: 0; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #CBCEBE; white-space: nowrap; }
+  th { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; color: #4A554E; letter-spacing: 0.04em; }
+  td.missing { max-width: 260px; white-space: normal; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #B8451F; }
+  a.download { display: inline-block; margin-top: 14px; font-size: 13px; color: #2E6E52; }
+</style>
+</head>
+<body>
+  <h1>Captured leads</h1>
+  <p class="sub" id="count-line">Loading…</p>
+  <a class="download" id="csv-link" href="#">Download CSV →</a>
+  <table id="leads-table">
+    <thead>
+      <tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>ATS %</th><th>Quiz</th><th>Tier</th><th>Missing keywords</th></tr>
+    </thead>
+    <tbody id="leads-body"></tbody>
+  </table>
+
+<script>
+  const key = new URLSearchParams(window.location.search).get('key') || '';
+  document.getElementById('csv-link').href = '/api/admin/leads.csv?key=' + encodeURIComponent(key);
+
+  fetch('/api/admin/leads.json?key=' + encodeURIComponent(key))
+    .then(r => r.json())
+    .then(leads => {
+      document.getElementById('count-line').textContent = leads.length + ' lead(s) captured';
+      const body = document.getElementById('leads-body');
+      leads.slice().reverse().forEach(l => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${new Date(l.createdAt).toLocaleString()}</td>
+          <td>${l.name || ''}</td>
+          <td>${l.email || ''}</td>
+          <td>${l.phone || ''}</td>
+          <td>${l.roleLabel || ''}</td>
+          <td>${l.atsScore ?? '—'}</td>
+          <td>${l.quizScore ?? '—'}</td>
+          <td>${l.quizTier ?? '—'}</td>
+          <td class="missing">${(l.missingKeywords || []).join(', ')}</td>
+        `;
+        body.appendChild(tr);
+      });
+    })
+    .catch(() => { document.getElementById('count-line').textContent = 'Could not load leads.'; });
+</script>
+</body>
+</html>

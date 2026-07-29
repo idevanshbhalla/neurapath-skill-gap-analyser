@@ -1,0 +1,120 @@
+{
+  "data-analyst": {
+    "label": "Data Analyst",
+    "course": "Data Analytics",
+    "keywords": [
+      "SQL", "Excel", "Power BI", "Tableau", "Python", "Pandas", "NumPy",
+      "Data Cleaning", "Data Visualization", "Dashboard", "Pivot Table",
+      "VLOOKUP", "Statistics", "A/B Testing", "ETL", "Google Sheets",
+      "Data Wrangling", "Regression", "KPI", "Reporting", "Data Modeling",
+      "Query Optimization", "Google Analytics", "R", "Data Storytelling"
+    ],
+    "mcqs": [
+      { "q": "Which SQL clause filters groups after an aggregation (e.g. after GROUP BY)?", "options": ["WHERE", "HAVING", "ORDER BY", "LIMIT"], "correct": 1 },
+      { "q": "What does ETL stand for?", "options": ["Extract, Transfer, Log", "Export, Transform, Load", "Extract, Transform, Load", "Evaluate, Test, Launch"], "correct": 2 },
+      { "q": "In Excel, which function looks up a value in one column and returns a matching value from another?", "options": ["SUMIF", "VLOOKUP", "CONCAT", "INDEX-ONLY"], "correct": 1 },
+      { "q": "Which chart type best shows how a metric changes over time?", "options": ["Pie chart", "Line chart", "Scatter plot", "Bar chart"], "correct": 1 },
+      { "q": "What is a primary key in a database table?", "options": ["Any column with numbers", "A column that can repeat values", "A unique identifier for each row", "The first column in a table"], "correct": 2 },
+      { "q": "Which pandas function reads a CSV file into a DataFrame?", "options": ["pd.load_csv()", "pd.read_csv()", "pd.open_csv()", "pd.import_csv()"], "correct": 1 },
+      { "q": "In hypothesis testing, a p-value below 0.05 typically suggests:", "options": ["The result is not significant", "The sample size was too small", "A statistically significant result", "The test failed"], "correct": 2 },
+      { "q": "Which SQL JOIN returns only rows that match in both tables?", "options": ["LEFT JOIN", "INNER JOIN", "FULL OUTER JOIN", "CROSS JOIN"], "correct": 1 },
+      { "q": "What is the main purpose of a pivot table?", "options": ["Store raw data permanently", "Dynamically summarize and aggregate data", "Connect to external databases", "Format cell colors"], "correct": 1 },
+      { "q": "In A/B testing, what is the \"control group\"?", "options": ["The group that sees the new version", "The group that sees the existing/unchanged version", "The group with the largest sample size", "The group that is excluded from analysis"], "correct": 1 }
+    ]
+  },
+  "python-developer": {
+    "label": "Python Developer",
+    "course": "Data Science",
+    "keywords": [
+      "Python", "Functions", "OOP", "List Comprehension", "Dictionary",
+      "Django", "Flask", "REST API", "Git", "Virtual Environment", "pip",
+      "Exception Handling", "Decorators", "Generators", "Multithreading",
+      "Unit Testing", "pytest", "JSON", "SQLAlchemy", "Docker",
+      "Data Structures", "Algorithms", "Debugging", "Lambda Functions", "Version Control"
+    ],
+    "mcqs": [
+      { "q": "What does len() return when called on a list?", "options": ["The last index", "The number of elements", "The data type", "The memory size"], "correct": 1 },
+      { "q": "Which keyword is used to define a function in Python?", "options": ["func", "def", "fn", "lambda"], "correct": 1 },
+      { "q": "What is the key difference between a list and a tuple?", "options": ["Tuples can hold more data types", "Lists are immutable, tuples are mutable", "Lists are mutable, tuples are immutable", "There is no difference"], "correct": 2 },
+      { "q": "What does 'self' refer to inside a class method?", "options": ["The class definition itself", "The current instance of the class", "A global variable", "The parent class"], "correct": 1 },
+      { "q": "Which library is most commonly used for writing unit tests in Python?", "options": ["numpy", "pytest", "requests", "flask"], "correct": 1 },
+      { "q": "What is a decorator in Python?", "options": ["A comment style", "A function that modifies the behavior of another function", "A type of loop", "A built-in data structure"], "correct": 1 },
+      { "q": "What does 'pip' do?", "options": ["Runs Python scripts", "Installs and manages Python packages", "Compiles Python to C", "Formats Python code"], "correct": 1 },
+      { "q": "Which built-in data structure stores data as key-value pairs?", "options": ["List", "Tuple", "Set", "Dictionary"], "correct": 3 },
+      { "q": "What is the average time complexity of binary search on a sorted list?", "options": ["O(n)", "O(n^2)", "O(log n)", "O(1)"], "correct": 2 },
+      { "q": "What does a try/except block handle?", "options": ["Loops", "Class inheritance", "Exceptions/errors during execution", "Variable scope"], "correct": 2 }
+    ]
+  },
+  "business-analyst": {
+    "label": "Business Analyst",
+    "course": "Business Analytics",
+    "keywords": [
+      "Requirements Gathering", "Stakeholder Management", "SQL", "Excel",
+      "Process Mapping", "SWOT Analysis", "Business Case", "User Stories",
+      "BRD", "FRD", "Gap Analysis", "KPI", "Agile", "Scrum", "Data Analysis",
+      "Power BI", "Visio", "Use Case Diagram", "Cost-Benefit Analysis",
+      "Risk Assessment", "Wireframing", "JIRA", "Root Cause Analysis",
+      "Process Improvement", "Stakeholder Interviews"
+    ],
+    "mcqs": [
+      { "q": "What does BRD stand for?", "options": ["Business Risk Document", "Business Requirements Document", "Basic Reporting Data", "Business Review Deck"], "correct": 1 },
+      { "q": "What is the main purpose of a SWOT analysis?", "options": ["Track project timelines", "Evaluate strengths, weaknesses, opportunities, and threats", "Measure server performance", "Design database schemas"], "correct": 1 },
+      { "q": "In Agile, a \"user story\" is best described as:", "options": ["A technical bug report", "A short description of a feature from the user's perspective", "A legal contract clause", "A project budget line item"], "correct": 1 },
+      { "q": "Gap analysis is used to:", "options": ["Compare the current state against the desired future state", "Calculate employee salaries", "Test software for bugs", "Design a company logo"], "correct": 0 },
+      { "q": "Which diagram type shows how users interact with a system?", "options": ["Gantt chart", "Use case diagram", "Pie chart", "Organizational chart"], "correct": 1 },
+      { "q": "In a Scrum team, a Business Analyst most often works closely with or as the:", "options": ["Scrum Master only", "Product Owner", "External auditor", "Database administrator"], "correct": 1 },
+      { "q": "What does KPI stand for?", "options": ["Key Process Indicator", "Key Performance Indicator", "Key Product Insight", "Known Performance Issue"], "correct": 1 },
+      { "q": "Root cause analysis is used to identify:", "options": ["The most expensive part of a project", "The underlying cause of a problem", "The fastest team member", "The newest software feature"], "correct": 1 },
+      { "q": "Stakeholder management is primarily concerned with:", "options": ["Writing source code", "Managing expectations and communication with interested parties", "Configuring servers", "Designing UI colors"], "correct": 1 },
+      { "q": "Which tool is commonly used for process mapping and flowcharts?", "options": ["Visio", "Photoshop", "MySQL Workbench", "Postman"], "correct": 0 }
+    ]
+  },
+  "data-scientist": {
+    "label": "Data Scientist",
+    "course": "Data Science",
+    "keywords": [
+      "Machine Learning", "Python", "R", "Statistics", "Regression",
+      "Classification", "Clustering", "Feature Engineering", "Scikit-learn",
+      "TensorFlow", "Pandas", "NumPy", "Deep Learning", "Neural Networks",
+      "Cross-Validation", "Model Evaluation", "Hyperparameter Tuning", "NLP",
+      "SQL", "Data Preprocessing", "Overfitting", "Random Forest",
+      "Gradient Boosting", "A/B Testing", "Data Visualization"
+    ],
+    "mcqs": [
+      { "q": "Overfitting means a model:", "options": ["Performs poorly on both training and new data", "Performs well on training data but poorly on unseen data", "Trains too quickly", "Uses too little data"], "correct": 1 },
+      { "q": "K-fold cross-validation is used to:", "options": ["Speed up model training", "Split data into k parts to more reliably evaluate a model", "Remove outliers automatically", "Convert categorical data to numbers"], "correct": 1 },
+      { "q": "The key difference between classification and regression is:", "options": ["Classification predicts categories, regression predicts continuous values", "Classification is only for images", "Regression only works with SQL", "There is no real difference"], "correct": 0 },
+      { "q": "Which of these is a popular library for building neural networks in Python?", "options": ["TensorFlow", "Excel", "Tableau", "JIRA"], "correct": 0 },
+      { "q": "\"Feature engineering\" refers to:", "options": ["Designing a product's UI", "Creating or transforming input variables to improve model performance", "Writing unit tests", "Deploying a model to production"], "correct": 1 },
+      { "q": "A confusion matrix is used to:", "options": ["Visualize sales trends", "Evaluate the performance of a classification model", "Clean missing data", "Optimize SQL queries"], "correct": 1 },
+      { "q": "Which algorithm builds an ensemble of decision trees?", "options": ["Linear Regression", "Random Forest", "K-Means", "PCA"], "correct": 1 },
+      { "q": "NLP stands for:", "options": ["Natural Language Processing", "New Learning Protocol", "Neural Layer Programming", "Numeric Language Parsing"], "correct": 0 },
+      { "q": "Regularization techniques like L1/L2 are mainly used to:", "options": ["Speed up data loading", "Reduce overfitting by penalizing large coefficients", "Visualize data", "Convert text to embeddings"], "correct": 1 },
+      { "q": "The bias-variance tradeoff describes the balance between:", "options": ["Speed and accuracy", "Underfitting (high bias) and overfitting (high variance)", "SQL and NoSQL databases", "Training and deployment cost"], "correct": 1 }
+    ]
+  },
+  "genai-engineer": {
+    "label": "Gen AI Engineer",
+    "course": "Gen AI",
+    "keywords": [
+      "LLM", "Prompt Engineering", "RAG", "Fine-tuning", "Embeddings",
+      "Vector Database", "LangChain", "OpenAI API", "Transformer",
+      "Tokenization", "Hallucination", "Few-shot Learning", "Semantic Search",
+      "Attention Mechanism", "GPT", "Hugging Face", "API Integration",
+      "Context Window", "Chatbot Development", "Model Evaluation", "Python",
+      "Prompt Chaining", "Agentic Workflows", "Function Calling", "Knowledge Base"
+    ],
+    "mcqs": [
+      { "q": "What does RAG stand for in the context of LLMs?", "options": ["Rapid AI Generation", "Retrieval-Augmented Generation", "Random Access Grid", "Recursive Answer Generation"], "correct": 1 },
+      { "q": "A vector database is primarily used to:", "options": ["Store embeddings for fast similarity search", "Store video files", "Replace SQL databases entirely", "Run model training"], "correct": 0 },
+      { "q": "\"Prompt engineering\" refers to:", "options": ["Writing backend APIs", "Crafting inputs to guide a model's output effectively", "Training a model from scratch", "Designing a chatbot's UI"], "correct": 1 },
+      { "q": "\"Hallucination\" in LLM outputs means the model:", "options": ["Refuses to answer", "Generates confident but false or fabricated information", "Runs slower than expected", "Only works with images"], "correct": 1 },
+      { "q": "Fine-tuning a model means:", "options": ["Deleting parts of the model", "Further training a pretrained model on specific data", "Changing the model's programming language", "Reducing the model's context window"], "correct": 1 },
+      { "q": "An \"embedding\" in NLP is:", "options": ["A numerical vector representing text's meaning", "A type of database index", "A user interface element", "A programming loop"], "correct": 0 },
+      { "q": "Most modern LLMs are built on which architecture?", "options": ["Transformer", "Random Forest", "Convolutional Neural Network only", "Decision Tree"], "correct": 0 },
+      { "q": "\"Few-shot learning\" in prompting means:", "options": ["Training the model for a few seconds", "Providing a few examples in the prompt to guide the model's response", "Using the smallest available model", "Only asking yes/no questions"], "correct": 1 },
+      { "q": "\"Function calling\" in LLM APIs allows the model to:", "options": ["Write its own training code", "Invoke external tools/functions with structured input", "Automatically fix bugs in your code", "Change its own parameters"], "correct": 1 },
+      { "q": "A model's \"context window\" refers to:", "options": ["The screen size it's displayed on", "The maximum amount of text/tokens it can process at once", "How many users can query it simultaneously", "The number of languages it supports"], "correct": 1 }
+    ]
+  }
+}

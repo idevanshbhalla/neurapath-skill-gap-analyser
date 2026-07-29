@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: neurapath-skill-gap-analyser
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: WHATSAPP_NUMBER
+        value: "9818108500"
+      - key: ADMIN_KEY
+        generateValue: true
